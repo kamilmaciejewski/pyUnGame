@@ -6,6 +6,5 @@ class Neuron:
 
     @staticmethod
     def calculate():
-        print("Neuron calc")
         val = 1
 

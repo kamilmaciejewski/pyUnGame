@@ -1,3 +1,5 @@
+import time
+
 import pygame
 from network import Network
 
@@ -15,5 +17,5 @@ class Creature(object):
         self.body = pygame.Rect(pos_x, pos_y, self.size, self.size)
 
     def update(self):
-        print("Creature update")
         self.network.update()
+

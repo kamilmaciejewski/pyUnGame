@@ -10,6 +10,5 @@ class Network:
             self.neurons.append(Neuron())
 
     def update(self):
-        print("Creature updated")
         for neuron in self.neurons:
             neuron.calculate()
