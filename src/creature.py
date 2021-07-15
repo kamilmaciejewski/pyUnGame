@@ -1,6 +1,7 @@
-import time
+from random import randrange
 
 import pygame
+
 from network import Network
 
 
@@ -19,3 +20,6 @@ class Creature(object):
     def update(self):
         self.network.update()
 
+    def shake(self):
+        self.body.x += (randrange(-3, 4))
+        self.body.y += (randrange(-3, 4))
