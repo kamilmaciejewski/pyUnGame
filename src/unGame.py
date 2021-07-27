@@ -30,10 +30,10 @@ sys.path.append('../')
 
 
 world = World()
-for i in range(100):
-    logger.log("unGame", " creature " + str(i) + " add")
+for i in range(2):
+    logger.log("unGame", " creature " + str(i) + " add:")
     world.creatures.append(
-        Creature(i, 350 + randrange(100), 250 + randrange(100), randrange(1, 10), randrange(5, 15), 1))
+        Creature(i, 350 + randrange(100), 250 + randrange(100), randrange(1, 10), randrange(5, 15), 2))
 
 # stop_threads = False
 # x = threading.Thread(target=thread_function, args=(creatures,))
@@ -47,10 +47,10 @@ max_fps = 60
 
 engines = []
 
-worldEngine = WorldEngine(world, 'World engine', 10)
+worldEngine = WorldEngine(world, 'World engine', 15)
 worldEngine.start()
 engines.append(worldEngine)
-neuralEngine = NeuralEngine(world, 'Neural engine', 10)
+neuralEngine = NeuralEngine(world, 'Neural engine', 1)
 neuralEngine.start()
 engines.append(neuralEngine)
 while True:
@@ -90,11 +90,6 @@ while True:
 
     stats = font.render("Stat: " + str(world.creatures[0].network.neurons[0].threshold), True, pygame.Color('white'))
     screen.blit(stats, (5, 50))
-    stats0 = font.render("Neur count: " + str(world.creatures[0].network.counter), True, pygame.Color('white'))
-    screen.blit(stats0, (5, 60))
-    stats1 = font.render("Neur eng count: " + str(neuralEngine.counter), True,
-                         pygame.Color('white'))
-    screen.blit(stats1, (5, 70))
 
     for cr in world.creatures:
         pygame.draw.rect(screen, pygame.Color(50, 100, 200, 5), cr.body)

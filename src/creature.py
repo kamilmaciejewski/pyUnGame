@@ -12,14 +12,14 @@ class Creature(object):
     size = 10.0
     speed = 5
     body = pygame.Rect
-    network_size = 1
+    network_size = 2
     network = Network
     cr_id = 0
 
     def __init__(self, cr_id, pos_x, pos_y, size, speed, network_size):
         logger.log("Creature", str(cr_id) + " created")
         self.cr_id = cr_id
-        self.network = Network(network_size, cr_id)
+        self.network = Network(cr_id, network_size)
         self.size = size
         self.posX = pos_x
         self.posY = pos_y
@@ -28,6 +28,5 @@ class Creature(object):
         self.network_size = network_size
 
     def update(self):
-        logger.log("Creature" + str(self.cr_id), " update")
         self.body.x += (randrange((-1 * self.speed) + 1, self.speed))
         self.body.y += (randrange((-1 * self.speed) + 1, self.speed))
