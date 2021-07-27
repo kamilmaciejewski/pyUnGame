@@ -43,7 +43,7 @@ class ThreadWithException(threading.Thread):
 
     def __init__(self, name, fps):
         threading.Thread.__init__(self)
-        self.name = name + " " + str(fps)
+        self.name = name + " (" + str(fps) + ")"
         self.maxFps = fps
         if fps <= 0:
             return

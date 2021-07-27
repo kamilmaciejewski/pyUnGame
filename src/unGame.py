@@ -3,6 +3,7 @@ from random import randrange
 
 import pygame
 
+from src import logger
 from src.creature import Creature
 from src.engine.neuralEngine import NeuralEngine
 from src.engine.worldEngine import WorldEngine
@@ -29,9 +30,10 @@ sys.path.append('../')
 
 
 world = World()
-for i in range(300):
-    # creature = Creature()
-    world.creatures.append(Creature(350 + randrange(100), 250 + randrange(100)))
+for i in range(100):
+    logger.log("unGame", " creature " + str(i) + " add")
+    world.creatures.append(
+        Creature(i, 350 + randrange(100), 250 + randrange(100), randrange(1, 10), randrange(5, 15), 1))
 
 # stop_threads = False
 # x = threading.Thread(target=thread_function, args=(creatures,))
@@ -45,29 +47,23 @@ max_fps = 60
 
 engines = []
 
-worldEngine = WorldEngine(world, 'World engine', 60)
+worldEngine = WorldEngine(world, 'World engine', 10)
 worldEngine.start()
 engines.append(worldEngine)
-neuralEngine = NeuralEngine(world, 'Neural engine', 0)
+neuralEngine = NeuralEngine(world, 'Neural engine', 10)
 neuralEngine.start()
 engines.append(neuralEngine)
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            # stop_threads = True
-            # x.join()
-            worldEngine.raise_exception()
-            worldEngine.join()
-            neuralEngine.raise_exception()
-            neuralEngine.join()
+            for engine in engines:
+                engine.raise_exception()
+                engine.join()
             sys.exit(0)
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-            # stop_threads = True
-            # x.join()
-            worldEngine.raise_exception()
-            worldEngine.join()
-            neuralEngine.raise_exception()
-            neuralEngine.join()
+            for engine in engines:
+                engine.raise_exception()
+                engine.join()
             sys.exit(0)
 
     keys = pygame.key.get_pressed()
@@ -82,23 +78,23 @@ while True:
         box.y += 1
 
     screen.fill((0, 0, 0))
-    offset = 100
+    offset = 25
     for engine in engines:
-        # fpsEngine =
         screen.blit(font.render(str(engine.name) + ' ' + str(int(engine.get_fps())), True, pygame.Color('white')),
                     (5, offset))
         offset += 10
-    fps = font.render("Screen: " + str(int(clock.get_fps())), True, pygame.Color('white'))
-    # fps0 = font.render("Engine: " + str(int(clock0.get_fps())), True, pygame.Color('white'))
     world_size = font.render("World: " + str(len(world.creatures)), True, pygame.Color('white'))
+    fps = font.render("Screen: " + str(int(clock.get_fps())), True, pygame.Color('white'))
     screen.blit(fps, (5, 5))
+    screen.blit(world_size, (5, 15))
 
-    # screen.blit(fps0, (5, 20))
-    fps1 = font.render("World Engine: " + str(int(worldEngine.get_fps())), True, pygame.Color('white'))
-    screen.blit(fps1, (5, 20))
-    fps2 = font.render("Nural Engine: " + str(int(neuralEngine.get_fps())), True, pygame.Color('white'))
-    screen.blit(fps2, (5, 30))
-    screen.blit(world_size, (5, 35))
+    stats = font.render("Stat: " + str(world.creatures[0].network.neurons[0].threshold), True, pygame.Color('white'))
+    screen.blit(stats, (5, 50))
+    stats0 = font.render("Neur count: " + str(world.creatures[0].network.counter), True, pygame.Color('white'))
+    screen.blit(stats0, (5, 60))
+    stats1 = font.render("Neur eng count: " + str(neuralEngine.counter), True,
+                         pygame.Color('white'))
+    screen.blit(stats1, (5, 70))
 
     for cr in world.creatures:
         pygame.draw.rect(screen, pygame.Color(50, 100, 200, 5), cr.body)
