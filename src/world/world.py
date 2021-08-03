@@ -1,2 +1,5 @@
 class World:
-    creatures = []
+    creatures = list
+
+    def __init__(self):
+        self.creatures = list()

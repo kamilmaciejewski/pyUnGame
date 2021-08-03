@@ -1,69 +1,56 @@
+import os
 import sys
-from random import randrange
 
 import pygame
 
-from src import logger
-from src.creature import Creature
+from src.engine.consoleHandler import ConsoleHandler
+
+sys.path.append(os.path.abspath(os.path.dirname(__file__)) + "/..")
+
+from src.engine.enginesHandler import EnginesHandler
+from src.engine.graphicsEngine import GraphicsEngine
 from src.engine.neuralEngine import NeuralEngine
 from src.engine.worldEngine import WorldEngine
 from src.world.world import World
 
-sys.path.append('../')
-# clock0 = pygame.time.Clock()
-
-
-# def thread_function(args):
-#     while True:
 #
-#         #print(len(args))
-#         #for _ in range(1):
-#         #    creatures.pop(0)
+# d = dict()
+# d[0.7] = 42
+# d[1.7] = 4
+# od = collections.OrderedDict(sorted(d.items()))
 #
-#         for creature in creatures:
-#             creature.update()
-#         global stop_threads
-#         if stop_threads:
-#             break
-#         #time.sleep(2)
-#         clock0.tick(500)
+# for k, v in od.items():
+#     logger.log("ASD","K:" + str(k) + ",v:" + str(v))
 
-
-world = World()
-for i in range(2):
-    logger.log("unGame", " creature " + str(i) + " add:")
-    world.creatures.append(
-        Creature(i, 350 + randrange(100), 250 + randrange(100), randrange(1, 10), randrange(5, 15), 2))
-
-# stop_threads = False
-# x = threading.Thread(target=thread_function, args=(creatures,))
-# x.start()
 pygame.init()
-font = pygame.font.SysFont('lucidaconsole', 12)
-screen = pygame.display.set_mode((800, 600), pygame.DOUBLEBUF, 32)
+world = World()
+
 box = pygame.Rect(20, 20, 10, 10)
-clock = pygame.time.Clock()
-max_fps = 60
+enginesHandler = EnginesHandler()
 
-engines = []
+consoleHandler = ConsoleHandler()
 
-worldEngine = WorldEngine(world, 'World engine', 15)
-worldEngine.start()
-engines.append(worldEngine)
-neuralEngine = NeuralEngine(world, 'Neural engine', 1)
-neuralEngine.start()
-engines.append(neuralEngine)
+enginesHandler.add_engine(WorldEngine('World', world, 15, consoleHandler))
+enginesHandler.add_engine(NeuralEngine('Neural', world, 100, consoleHandler))
+enginesHandler.add_engine(GraphicsEngine('Graphics', world, 999, consoleHandler))
+
 while True:
     for event in pygame.event.get():
+        if event.type == pygame.MOUSEBUTTONUP:
+            pos = pygame.mouse.get_pos()
+            found = False
+            for cr in world.creatures:
+                if cr.body.collidepoint(pos) and not found:
+                    cr.is_active = True
+                    found = True
+                else:
+                    cr.is_active = False
+
         if event.type == pygame.QUIT:
-            for engine in engines:
-                engine.raise_exception()
-                engine.join()
+            enginesHandler.stop_all()
             sys.exit(0)
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-            for engine in engines:
-                engine.raise_exception()
-                engine.join()
+            enginesHandler.stop_all()
             sys.exit(0)
 
     keys = pygame.key.get_pressed()
@@ -77,23 +64,19 @@ while True:
     if keys[pygame.K_s]:
         box.y += 1
 
-    screen.fill((0, 0, 0))
-    offset = 25
-    for engine in engines:
-        screen.blit(font.render(str(engine.name) + ' ' + str(int(engine.get_fps())), True, pygame.Color('white')),
-                    (5, offset))
-        offset += 10
-    world_size = font.render("World: " + str(len(world.creatures)), True, pygame.Color('white'))
-    fps = font.render("Screen: " + str(int(clock.get_fps())), True, pygame.Color('white'))
-    screen.blit(fps, (5, 5))
-    screen.blit(world_size, (5, 15))
+#   offset = 25
+#    for engine in engines:
+#        screen.blit(font.render(str(engine.name) + ' ' + str(int(engine.get_fps())), True, pygame.Color('white')),
+#                    (5, offset))
+#        offset += 10
 
-    stats = font.render("Stat: " + str(world.creatures[0].network.neurons[0].threshold), True, pygame.Color('white'))
-    screen.blit(stats, (5, 50))
+#    world_size = font.render("World: " + str(len(world.creatures)), True, pygame.Color('white'))
+#    fps = font.render("Screen: " + str(int(clock.get_fps())), True, pygame.Color('white'))
+#    screen.blit(fps, (5, 5))
+#    screen.blit(world_size, (5, 15))
 
-    for cr in world.creatures:
-        pygame.draw.rect(screen, pygame.Color(50, 100, 200, 5), cr.body)
+#    stats = font.render("Stat: " + str(world.creatures[0].network.neurons[0].threshold), True, pygame.Color('white'))
+#    screen.blit(stats, (5, 50))
 
-    pygame.draw.rect(screen, (0, 150, 255, 0), box)
-    pygame.display.flip()
-    clock.tick(max_fps)
+#    pygame.draw.rect(screen, (0, 150, 255, 0), box)
+#    clock.tick(max_fps)
