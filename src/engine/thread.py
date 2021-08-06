@@ -5,13 +5,13 @@ import pygame
 
 
 class ThreadWithException(threading.Thread):
-    clock = pygame.time.Clock()
-    maxFps = 60
-    previous = pygame.time.get_ticks()
-    frameStart = pygame.time.get_ticks()
-    frameSize = 0
-    fps = 0
-    tmpFps = 0
+    clock = pygame.time.Clock
+
+    def __init__(self, name, fps):
+        self.clock = pygame.time.Clock()
+        threading.Thread.__init__(self)
+        self.name = name
+        self.maxFps = fps
 
     def run_loop(self):
         pass
@@ -20,34 +20,10 @@ class ThreadWithException(threading.Thread):
         self.run_loop = runnable
 
     def get_fps(self):
-        # return self.clock.get_fps()
-        return self.fps
+        return int(self.clock.get_fps())
 
     def run_base(self):
-        while pygame.time.get_ticks() - self.frameStart < self.frameSize:
-            pygame.time.wait(1)
-
-        self.frameStart = pygame.time.get_ticks()
-
-        if pygame.time.get_ticks() - self.previous < 1000:
-            self.tmpFps += 1
-        else:
-            self.previous = pygame.time.get_ticks()
-            self.frameStart = pygame.time.get_ticks()
-            self.fps = self.tmpFps
-            self.tmpFps = 0
-
-        # self.clock.tick(self.maxFps)
-        # self.previous = pygame.time.get_ticks()
-        # pygame.time.wait(self.maxFps)
-
-    def __init__(self, name, fps):
-        threading.Thread.__init__(self)
-        self.name = name + " (" + str(fps) + ")"
-        self.maxFps = fps
-        if fps <= 0:
-            return
-        self.frameSize = 1000 / fps
+        self.clock.tick(self.maxFps)
 
     def run(self):
 
@@ -67,6 +43,10 @@ class ThreadWithException(threading.Thread):
         for id, thread in threading._active.items():
             if thread is self:
                 return id
+
+    def stop(self):
+        self.raise_exception()
+        self.join()
 
     def raise_exception(self):
         thread_id = self.get_id()

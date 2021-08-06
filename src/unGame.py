@@ -30,9 +30,9 @@ enginesHandler = EnginesHandler()
 
 consoleHandler = ConsoleHandler()
 
-enginesHandler.add_engine(WorldEngine('World', world, 15, consoleHandler))
-enginesHandler.add_engine(NeuralEngine('Neural', world, 100, consoleHandler))
-enginesHandler.add_engine(GraphicsEngine('Graphics', world, 999, consoleHandler))
+enginesHandler.add_engine(WorldEngine('World', world, 60, consoleHandler))
+enginesHandler.add_engine(NeuralEngine('Neural', world, 60, consoleHandler))
+enginesHandler.add_engine(GraphicsEngine('Graphics', world, 60, consoleHandler))
 
 while True:
     for event in pygame.event.get():

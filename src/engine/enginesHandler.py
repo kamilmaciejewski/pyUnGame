@@ -13,5 +13,4 @@ class EnginesHandler:
 
     def stop_all(self):
         for engine in self.__engines:
-            engine.raise_exception()
-            engine.join()
+            engine.stop()

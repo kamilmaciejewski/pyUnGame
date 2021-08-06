@@ -15,17 +15,26 @@ class Neuron:
         self.connections = list()
         self.threshold = 0
 
+    def lam(self, conn):
+        if conn.n.is_enabled():
+            self.val += conn.weight
+        return 0
+
     def calculate(self):
+        # log("neur", "OK")
         self.val = 0
+        # list(map(self.lam, self.connections))
         for conn in self.connections:
             if conn.n.is_enabled():
                 self.val += conn.weight
+
         if self.threshold == 0:
             self.threshold = self.val
         elif self.is_enabled():
             self.threshold += self.threshold_boost
         else:
             self.threshold -= self.threshold_boost
+        return 0
 
     def add_connection(self, nc):
         self.connections.append(nc)
