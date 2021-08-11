@@ -11,17 +11,22 @@ class WorldEngine(ThreadWithException):
     world = None
     nextId = int
     consoleHandler = ConsoleHandler
+    counter = int
 
     def __init__(self, name: str, world: World, fps: int, cons: ConsoleHandler):
         super().__init__(name, fps)
         self.world = world
         self.nextId = 0
         self.consoleHandler = cons
+        self.counter = 0
 
     def run_loop(self):
         self.consoleHandler.put_permanent_msg("world engine", str(self.get_fps()))
-        self.consoleHandler.put_permanent_msg("creatures", str(len(self.world.creatures)))
+
         if len(self.world.creatures) < ung_globals.worldSize:
+            self.consoleHandler.put_permanent_msg("creatures", str(len(self.world.creatures)))
+            self.counter += 1
+            self.consoleHandler.put_permanent_msg("cr ever sum", str(self.counter))
             self.world.creatures.append(
                 Creature(self.nextId, 350 + randrange(100), 250 + randrange(100), randrange(15, 30), randrange(2, 6),
                          ung_globals.creatureNeurons))

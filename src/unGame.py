@@ -4,15 +4,18 @@ import sys
 import pygame
 
 from src.engine.consoleHandler import ConsoleHandler
+from src.logger import log
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__)) + "/..")
 
+import time
 from src.engine.enginesHandler import EnginesHandler
 from src.engine.graphicsEngine import GraphicsEngine
 from src.engine.neuralEngine import NeuralEngine
 from src.engine.worldEngine import WorldEngine
 from src.world.world import World
 
+start = time.time()
 #
 # d = dict()
 # d[0.7] = 42
@@ -22,6 +25,7 @@ from src.world.world import World
 # for k, v in od.items():
 #     logger.log("ASD","K:" + str(k) + ",v:" + str(v))
 
+
 pygame.init()
 world = World()
 
@@ -29,19 +33,32 @@ box = pygame.Rect(20, 20, 10, 10)
 enginesHandler = EnginesHandler()
 
 consoleHandler = ConsoleHandler()
-
-enginesHandler.add_engine(WorldEngine('World', world, 60, consoleHandler))
-enginesHandler.add_engine(NeuralEngine('Neural', world, 60, consoleHandler))
 enginesHandler.add_engine(GraphicsEngine('Graphics', world, 60, consoleHandler))
+enginesHandler.add_engine(WorldEngine('World', world, 60, consoleHandler))
+enginesHandler.add_engine(NeuralEngine('Neural', world, 999, consoleHandler))
 
 while True:
+    end = time.time()
+    val = end - start
+    days = val // 86400
+    hours = val // 3600 % 24
+    minutes = val // 60 % 60
+    seconds = val % 60
+    consoleHandler.put_permanent_msg("elapsed", str(int(days)) + "d, " + str(int(hours))+ "h, " + str(int(minutes)) + "m, " + str(int(seconds)) + "s")
+    pygame.time.wait(1000)
+
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONUP:
             pos = pygame.mouse.get_pos()
             found = False
             for cr in world.creatures:
                 if cr.body.collidepoint(pos) and not found:
+
                     cr.is_active = True
+                    log("Data", str(cr.network.neurons_data))
+                    log("Data_res", str(cr.network.neurons_data_res))
+                    log("Weights", str(cr.network.neurons_wages[0]))
+                    log("Conn", cr.network.neurons[0].getConnList())
                     found = True
                 else:
                     cr.is_active = False

@@ -4,6 +4,6 @@ font = "lucidaconsole"
 fontSize = 12
 
 # Default world settings
-worldSize = 100
-creatureNeurons = 10
-neuronConnections = 2
+worldSize = 400
+creatureNeurons = 200
+neuronConnections = 10

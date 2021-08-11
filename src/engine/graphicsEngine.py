@@ -16,6 +16,7 @@ class GraphicsEngine(ThreadWithException):
         super().__init__(name, fps)
         self.font = pygame.font.SysFont(ung_globals.font, ung_globals.fontSize)
         # pygame.DOUBLEBUF
+
         self.screen = pygame.display.set_mode(ung_globals.screenSize)
         # , depth=32, flags=pygame.SRCALPHA)
         self.world = world

@@ -1,3 +1,4 @@
+import numpy
 import pygame
 
 
@@ -6,14 +7,18 @@ class Neuron:
     connections = list
     threshold = float
     threshold_boost = 0.01
-    n_id = str
+    n_id = int
     body = pygame.Rect
+    n_data = numpy.array
+    n_wages = numpy.array
 
-    def __init__(self, n_id, pos: tuple):
+    def __init__(self, n_id, n_data: numpy.array, n_wages: numpy.array, pos: tuple):
         self.n_id = n_id
         self.body = pygame.Rect(pos)
         self.connections = list()
         self.threshold = 0
+        self.n_data = n_data
+        self.n_wages = n_wages
 
     def lam(self, conn):
         if conn.n.is_enabled():
@@ -51,3 +56,9 @@ class Neuron:
 
         for connection in self.connections:
             pygame.draw.line(screen, pygame.Color(128, 128, 128), self.body.center, connection.n.body.center, 1)
+
+    def getConnList(self):
+        res = ""
+        for conn in self.connections:
+                res += (str(conn.n.n_id) + ": " + str(conn.weight) + ";")
+        return res

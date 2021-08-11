@@ -9,7 +9,6 @@ class Creature(object):
     size = 10.0
     speed = 0.1
     body = pygame.Rect
-    network_size = 2
     network = Network
     cr_id = 0
     is_active = False
@@ -18,13 +17,12 @@ class Creature(object):
     count = int
 
     def __init__(self, cr_id, pos_x, pos_y, size, speed, network_size):
-        self.energy = 2550
+        self.energy = 255000
         self.cr_id = cr_id
         self.network = Network(cr_id, network_size)
         self.size = size
         self.body = pygame.Rect(pos_x - (self.size / 2), pos_y - (self.size / 2), self.size, self.size)
         self.speed = speed
-        self.network_size = network_size
         self.shape_surf = pygame.Surface(pygame.Rect(self.body).size, pygame.SRCALPHA)
         pygame.draw.rect(self.shape_surf, pygame.Color(50, 100, 200, 64), self.shape_surf.get_rect())
         self.count = 0
