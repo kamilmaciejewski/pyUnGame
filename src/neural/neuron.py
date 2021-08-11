@@ -16,7 +16,7 @@ class Neuron:
         self.n_id = n_id
         self.body = pygame.Rect(pos)
         self.connections = list()
-        self.threshold = 0
+        self.threshold = 0.5
         self.n_data = n_data
         self.n_wages = n_wages
 
