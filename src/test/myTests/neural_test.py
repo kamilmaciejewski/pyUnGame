@@ -1,8 +1,6 @@
 import unittest
 from random import randrange
 
-import numpy
-
 from src.neural.network import Network
 from src.neural.neuron import Neuron
 
@@ -11,10 +9,11 @@ def print_network(network):
     print("Data:")
     print(network.neurons_data)
     print("Weights")
-    print(network.neurons_wages)
+    print(network.neurons_weights)
 
     for neuron in network.neurons:
-        print("neuron: " + str(neuron.n_id) + ", val: " + str(neuron.val) + ", thr: " + str(neuron.threshold))
+        print("neuron: " + str(neuron.n_id) + ", val: " + str(neuron.val) + ", thr: "
+              + str(neuron.data_handler.get_threshold()))
         print("neuron: " + str(neuron.n_id) + ", is_enabled: " + str(neuron.is_enabled()))
         for conn in neuron.connections:
             print("conn: " + str(conn.n.n_id) + ": " + str(conn.weight))
@@ -24,10 +23,10 @@ class TestNeuralNetwork(unittest.TestCase):
     def test_neuron_create(self):
         size = 3
         n_id = 42
-        neurons_data = numpy.random.rand(size)
-        neurons_wages = numpy.zeros((size, size))
-
-        neuron = Neuron(n_id, neurons_data, neurons_wages, (randrange(1, 255), randrange(1, 255), 5, 5))
+        # neurons_data = numpy.random.rand(size)
+        # neurons_weights = numpy.zeros((size, size))
+        #
+        neuron = Neuron(n_id, None, (randrange(1, 255), randrange(1, 255), 5, 5))
         self.assertEqual(neuron.n_id, n_id)
 
     def test_network_create(self):
@@ -48,5 +47,7 @@ class TestNeuralNetwork(unittest.TestCase):
 
         for neuron in network.neurons:
             self.assertEqual(neuron.val, network.neurons_data_res[neuron.n_id])
+            self.assertEqual(False, network.neurons_is_input[neuron.n_id])
+            self.assertEqual(0.5, network.neurons_thresholds[neuron.n_id])
             for conn in neuron.connections:
-                self.assertEqual(conn.weight, network.neurons_wages[neuron.n_id, conn.n.n_id])
+                self.assertEqual(conn.weight, network.neurons_weights[neuron.n_id, conn.n.n_id])
