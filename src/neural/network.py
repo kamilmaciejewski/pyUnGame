@@ -67,8 +67,10 @@ class Network:
         screen.blit(self.shape_surf, (0, 100))
 
     def update(self):
-        for neuron in self.neurons:
-            neuron.calculate()
+        # for neuron in self.neurons:
+        #    neuron.calculate()
         self.neurons_data_res = numpy.dot(self.neurons_data, self.neurons_weights.T)
+        self.neurons_weights = self.neurons_weights + (self.neurons_thresholds * self.neurons_is_input)
+
         # list(map(lam, self.neurons))
-        #return self.n_id
+        # return self.n_id

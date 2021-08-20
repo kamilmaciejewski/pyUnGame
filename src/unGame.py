@@ -57,8 +57,8 @@ while True:
                     cr.is_active = True
                     log("Data", str(cr.network.neurons_data))
                     log("Data_res", str(cr.network.neurons_data_res))
-                    log("Weights", str(cr.network.neurons_wages[0]))
-                    log("Conn", cr.network.neurons[0].getConnList())
+                    log("Weights", str(cr.network.neurons_weights[0]))
+                    log("Conn", cr.network.neurons[0].get_conn_list())
                     found = True
                 else:
                     cr.is_active = False

@@ -12,8 +12,10 @@ class Foo:
 
 x = 500000
 # y = 2
-# B = np.array([2., -1., 4.])
-# C = np.array([[2., -1., 4.], [2., -1., 4.]])
+B = np.array([2., -1., 4.])
+C = np.array([[True, 0., 4.]])
+print("SUM")
+print(B * C)
 D = randnums = np.random.randint(1, 101, x)
 E = randnums = np.random.randint(1, 101, x)
 
@@ -49,7 +51,7 @@ print("numpy array--- %s seconds ---" % time_numpy)
 start_time = time.time()
 main_calc_manual()
 time_manual = (time.time() - start_time)
-print("manual     --- %s seconds ---" % time_manual)
-print("ratio      --- %s ---" % (time_manual / time_numpy))
+# print("manual     --- %s seconds ---" % time_manual)
+# print("ratio      --- %s ---" % (time_manual / time_numpy))
 print(output)
 print(output_manual)

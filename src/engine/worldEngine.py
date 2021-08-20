@@ -27,6 +27,11 @@ class WorldEngine(ThreadWithException):
             self.consoleHandler.put_permanent_msg("creatures", str(len(self.world.creatures)))
             self.counter += 1
             self.consoleHandler.put_permanent_msg("cr ever sum", str(self.counter))
+            self.consoleHandler.put_permanent_msg("neur sum",
+                                                  str(format((self.counter * ung_globals.creatureNeurons), ",")))
+            self.consoleHandler.put_permanent_msg("conn sum",
+                                                  str(format((self.counter * ung_globals.creatureNeurons
+                                                              * ung_globals.neuronConnections), ",")))
             self.world.creatures.append(
                 Creature(self.nextId, 350 + randrange(100), 250 + randrange(100), randrange(15, 30), randrange(2, 6),
                          ung_globals.creatureNeurons))
