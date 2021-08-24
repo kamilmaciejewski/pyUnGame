@@ -5,7 +5,7 @@ from src.neural.networkDataHandler import NetworkDataHandler
 
 class Neuron:
     val = 0
-    connections = list
+    # connections = list
     threshold_boost = 0.01
     n_id = int
     body = pygame.Rect
@@ -22,14 +22,14 @@ class Neuron:
             self.val += conn.weight
         return 0
 
-    def calculate(self):
+        # def calculate(self):
         # log("neur", "OK")
-        self.val = 0
+        # self.val = 0
         # list(map(self.lam, self.connections))
-        for conn in self.connections:
-            if conn.n.is_enabled():
-                self.val += conn.weight
-        return 0
+        # for conn in self.connections:
+        #    if conn.n.is_enabled():
+        #        self.val += conn.weight
+        # return 0
 
     def add_connection(self, nc):
         self.connections.append(nc)

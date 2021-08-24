@@ -16,8 +16,8 @@ B = np.array([2., -1., 4.])
 C = np.array([[True, 0., 4.]])
 print("SUM")
 print(B * C)
-D = randnums = np.random.randint(1, 101, x)
-E = randnums = np.random.randint(1, 101, x)
+D = np.random.randint(1, 101, x)
+E = np.random.randint(1, 101, x)
 
 foo = Foo(D[0])
 print(str(foo.val))
@@ -26,6 +26,11 @@ D[0] = 123.
 print(str(foo.val))
 print(str(D[0]))
 
+print("F")
+F = np.array([[1., 2., 3.], [5, 6, 7], [8, 9, 0]])
+print(F)
+F[1].fill(42)
+print(F)
 # C = np.append(C, C)
 output = []
 output_manual = [x]

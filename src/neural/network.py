@@ -9,8 +9,8 @@ from src.neural.neuronConnection import NeuronConnection
 from src.utils import geometry
 
 
-def lam(neuron: Neuron):
-    return neuron.calculate()
+# def lam(neuron: Neuron):
+#     return neuron.calculate()
 
 
 class Network:
@@ -74,3 +74,10 @@ class Network:
 
         # list(map(lam, self.neurons))
         # return self.n_id
+
+    def make_input(self, n_id: int):
+        self.neurons_is_input[n_id] = True
+        self.neurons_weights[n_id].fill(0.)
+        self.neurons_thresholds[n_id] = 0.
+        for conn in self.neurons[n_id].connections:
+            conn.weight = 0.
