@@ -34,6 +34,12 @@ print(F)
 # C = np.append(C, C)
 output = []
 output_manual = [x]
+print("FILL")
+F1 = np.array([False, False, True])
+F2 = F1 * 2 - 1
+F3 = np.invert(F1)
+print(F1)
+print(F3)
 
 
 def main_calc():

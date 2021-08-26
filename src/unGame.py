@@ -55,9 +55,9 @@ while True:
                 if cr.body.collidepoint(pos) and not found:
 
                     cr.is_active = True
-                    log("Data", str(cr.network.neurons_data))
-                    log("Data_res", str(cr.network.neurons_data_res))
-                    log("Weights", str(cr.network.neurons_weights[0]))
+                    log("Data", str(cr.network.data.neurons_data))
+                    log("Data_res", str(cr.network.data.neurons_data_res))
+                    log("Weights", str(cr.network.data.neurons_weights[0]))
                     log("Conn", cr.network.neurons[0].get_conn_list())
                     found = True
                 else:

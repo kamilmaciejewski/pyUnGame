@@ -4,6 +4,7 @@ from random import randrange
 import numpy
 
 from src import ung_globals
+from src.neural.networkData import NetworkData
 from src.neural.neuron import *
 from src.neural.neuronConnection import NeuronConnection
 from src.utils import geometry
@@ -14,10 +15,7 @@ from src.utils import geometry
 
 
 class Network:
-    neurons_data = numpy.array
-    neurons_data_res = numpy.array
-    neurons_wages = numpy.array
-    neurons_thresholds = numpy.array
+    data = NetworkData
     neurons = list
     n_id = int
     size = int
@@ -25,20 +23,17 @@ class Network:
     tmp = dict
 
     def __init__(self, n_id, size):
+        self.data = NetworkData(size)
         self.n_id = n_id
         self.neurons = list()
-        self.neurons_data_res = numpy.zeros(size)
+        # self.neurons_data_res = numpy.zeros(size)
         # self.neurons_data = numpy.random.rand(size)
-        self.neurons_data = numpy.zeros(size)
-        self.neurons_is_input = numpy.full(size, False)
-        self.neurons_thresholds = numpy.full(size, 0.5)
-        self.neurons_weights = numpy.zeros((size, size))
+
 
         for i in range(size):
             self.neurons.append(
                 Neuron(i,
-                       NetworkDataHandler(i, self.neurons_data, self.neurons_data_res, self.neurons_weights[i],
-                                          self.neurons_thresholds, self.neurons_is_input),
+                       NetworkDataHandler(i, self.data),
                        (randrange(1, 255), randrange(1, 255), 5, 5)))
 
         for neuron in self.neurons:
@@ -53,7 +48,7 @@ class Network:
             for k, v in sorted_connections.items():
                 if len(neuron.connections) < ung_globals.neuronConnections:
                     neuron.connections.append(NeuronConnection(v, k))
-                    self.neurons_weights[neuron.n_id, v.n_id] = (k * 0.01)
+                    self.data.neurons_weights[neuron.n_id, v.n_id] = (k * 0.01)
                 else:
                     break
 
@@ -69,15 +64,18 @@ class Network:
     def update(self):
         # for neuron in self.neurons:
         #    neuron.calculate()
-        self.neurons_data_res = numpy.dot(self.neurons_data, self.neurons_weights.T)
-        self.neurons_weights = self.neurons_weights + (self.neurons_thresholds * self.neurons_is_input)
+        self.data.neurons_data = self.data.neurons_data * self.data.neurons_is_input
+        self.data.neurons_data = self.data.neurons_data + numpy.dot(self.data.neurons_data, self.data.neurons_weights.T)
+        self.data.neurons_thresholds = self.data.neurons_thresholds - \
+                                       (self.data.neurons_thresholds_delta * numpy.invert(self.data.neurons_is_input) *
+                                        (self.data.neurons_data < self.data.neurons_thresholds))
 
         # list(map(lam, self.neurons))
         # return self.n_id
 
     def make_input(self, n_id: int):
-        self.neurons_is_input[n_id] = True
-        self.neurons_weights[n_id].fill(0.)
-        self.neurons_thresholds[n_id] = 0.
+        self.data.neurons_is_input[n_id] = True
+        self.data.neurons_weights[n_id].fill(0.)
+        self.data.neurons_thresholds[n_id] = 0.
         for conn in self.neurons[n_id].connections:
             conn.weight = 0.
