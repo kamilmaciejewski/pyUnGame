@@ -36,6 +36,7 @@ class WorldEngine(ThreadWithException):
                 Creature(self.nextId, 350 + randrange(100), 250 + randrange(100), randrange(15, 30), randrange(2, 6),
                          ung_globals.creatureNeurons))
             self.nextId += 1
+            self.world.creatures[0].is_active = True
         for cr in self.world.creatures:
             cr.update()
             if not cr.is_alive():

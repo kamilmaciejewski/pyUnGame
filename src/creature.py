@@ -17,7 +17,7 @@ class Creature(object):
     count = int
 
     def __init__(self, cr_id, pos_x, pos_y, size, speed, network_size):
-        self.energy = 255000
+        self.energy = 2550000
         self.cr_id = cr_id
         self.network = Network(cr_id, network_size)
         self.size = size

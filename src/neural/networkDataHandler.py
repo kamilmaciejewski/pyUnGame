@@ -15,11 +15,17 @@ class NetworkDataHandler:
     def get_val(self) -> float:
         return self.data.neurons_data[self.neuron_id]
 
+    def set_val(self, val: float):
+        self.data.neurons_data[self.neuron_id] = val
+
     def get_threshold(self) -> float:
         return self.data.neurons_thresholds[self.neuron_id]
 
     def get_weights(self) -> float:
         return self.data.neurons_weights[self.neuron_id]
+
+    def get_weight(self, neuron_id: int) -> float:
+        return self.data.neurons_weights[self.neuron_id, neuron_id]
 
     def is_input(self) -> bool:
         return self.data.neurons_is_input[self.neuron_id]

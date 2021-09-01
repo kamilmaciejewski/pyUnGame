@@ -18,7 +18,9 @@ print("SUM")
 print(B * C)
 D = np.random.randint(1, 101, x)
 E = np.random.randint(1, 101, x)
-
+print("RAND")
+print(B * C)
+print(np.random.default_rng().uniform(0.1, 0.3, 10))
 foo = Foo(D[0])
 print(str(foo.val))
 print(str(D[0]))
@@ -36,10 +38,33 @@ output = []
 output_manual = [x]
 print("FILL")
 F1 = np.array([False, False, True])
-F2 = F1 * 2 - 1
-F3 = np.invert(F1)
+F2 = F1 * 1
 print(F1)
-print(F3)
+print(F2)
+
+print("DATA NON INPUT")
+data = np.array([0.5, 0.5, 0.5, 0.5, 0.5, 1., 0.8])
+print(data)
+weights = np.array([
+    [0., 0., 0., 0., 0., 0., 0.],  # 1
+    [0., 0., 0., 0., 0., 0., 0.],  # 2
+    [0., 0., 0., 0., 0., 0., 0.],  # 3
+    [0., 0., 0., 0., 0., 0., 0.],  # 4
+    [0., 0., 0., 0., 0., 0., 0.],  # 5
+    [0.1, 0.1, 0.1, 0.1, 0.1, 0., 0.7],  # 6
+    [0.1, 0.1, 0.1, 0.1, 0.1, 0.4, 0.],  # 7
+])
+is_enabled = np.array([False, False, False, False, False, True, False])
+is_input = np.array([True, True, True, True, True, False, False])
+
+expected = [0., 0., 0., 0., 0., 0., 0.4]
+
+data_filtered = data * np.invert(is_input) * is_enabled
+print("data_filtered")
+print(data_filtered)
+res = np.dot(data_filtered, weights.T)
+print("RES")
+print(res)
 
 
 def main_calc():
