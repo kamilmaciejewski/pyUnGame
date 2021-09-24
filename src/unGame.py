@@ -34,8 +34,8 @@ enginesHandler = EnginesHandler()
 
 consoleHandler = ConsoleHandler()
 enginesHandler.add_engine(GraphicsEngine('Graphics', world, 60, consoleHandler))
-enginesHandler.add_engine(WorldEngine('World', world, 60, consoleHandler))
-enginesHandler.add_engine(NeuralEngine('Neural', world, 999, consoleHandler))
+enginesHandler.add_engine(WorldEngine('World', world, 5, consoleHandler))
+enginesHandler.add_engine(NeuralEngine('Neural', world, 60, consoleHandler))
 
 while True:
     end = time.time()
@@ -44,11 +44,16 @@ while True:
     hours = val // 3600 % 24
     minutes = val // 60 % 60
     seconds = val % 60
-    consoleHandler.put_permanent_msg("elapsed", str(int(days)) + "d, " + str(int(hours))+ "h, " + str(int(minutes)) + "m, " + str(int(seconds)) + "s")
+    consoleHandler.put_permanent_msg("elapsed",
+                                     str(int(days)) + "d, " + str(int(hours)) + "h, " + str(int(minutes)) + "m, " + str(
+                                         int(seconds)) + "s")
     pygame.time.wait(1000)
 
     for event in pygame.event.get():
-        if event.type == pygame.MOUSEBUTTONUP:
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+            enginesHandler.stop_all()
+            sys.exit(0)
+        elif event.type == pygame.MOUSEBUTTONUP:
             pos = pygame.mouse.get_pos()
             found = False
             for cr in world.creatures:
@@ -63,10 +68,7 @@ while True:
                 else:
                     cr.is_active = False
 
-        if event.type == pygame.QUIT:
-            enginesHandler.stop_all()
-            sys.exit(0)
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+        elif event.type == pygame.QUIT:
             enginesHandler.stop_all()
             sys.exit(0)
 

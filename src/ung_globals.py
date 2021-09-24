@@ -8,5 +8,5 @@ neuron_fontSize = 10
 network_geometry_size = 512
 # Default world settings
 worldSize = 5
-creatureNeurons = 15
+creatureNeurons = 150
 neuronConnections = 4

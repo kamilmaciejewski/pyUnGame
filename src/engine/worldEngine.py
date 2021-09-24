@@ -1,9 +1,10 @@
 from random import randrange
 
 from src import ung_globals
-from src.creature import Creature
 from src.engine.consoleHandler import ConsoleHandler
 from src.engine.thread import ThreadWithException
+from src.world.creature import Creature
+from src.world.food import Food
 from src.world.world import World
 
 
@@ -19,6 +20,8 @@ class WorldEngine(ThreadWithException):
         self.nextId = 0
         self.consoleHandler = cons
         self.counter = 0
+        self.world.food.append(
+            Food(self.nextId, 350 + randrange(100), 250 + randrange(100), randrange(50, 100)))
 
     def run_loop(self):
         self.consoleHandler.put_permanent_msg("world engine", str(self.get_fps()))
@@ -38,6 +41,6 @@ class WorldEngine(ThreadWithException):
             self.nextId += 1
             self.world.creatures[0].is_active = True
         for cr in self.world.creatures:
-            cr.update()
+            cr.update(self.world.food)
             if not cr.is_alive():
                 self.world.creatures.remove(cr)

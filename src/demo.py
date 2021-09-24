@@ -65,11 +65,40 @@ print(data_filtered)
 res = np.dot(data_filtered, weights.T)
 print("RES")
 print(res)
+print("SIGM")
+
+
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+
+sigmoid_v = np.vectorize(sigmoid)
+sigm_in = np.random.default_rng().uniform(0., 1, 10 * x)
+
+print("SIGM END")
+
+print("Input ID detect")
+
+inputNeurons = np.array([True, False, True, False, True, True])
+inputData = np.array([0.5, 0.5, 0.5, 0.5, 0.5, 0.5])
+inputIdList = []
+for i in range(len(inputNeurons)):
+    if inputNeurons[i]:
+        inputIdList.append(i)
+print(inputIdList)
+print("Input clean check")
+print(inputData * np.invert(inputNeurons))
 
 
 def main_calc():
     global output
-    output = np.dot(D, E)
+    # output = np.dot(D, E)
+    # sigm_out = sigmoid_v(sigm_in)  SLOW!
+
+    sigm_out = np.apply_along_axis(sigmoid, -1, sigm_in)  # FAST SIGMOID
+    # print(sigm_in)
+    print(sigm_out)
+    # print(sigm_out0)
 
 
 def main_calc_manual():

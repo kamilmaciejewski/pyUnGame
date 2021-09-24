@@ -1,6 +1,6 @@
-from src.creature import Creature
 from src.engine.consoleHandler import ConsoleHandler
 from src.engine.thread import ThreadWithException
+from src.world.creature import Creature
 from src.world.world import World
 
 

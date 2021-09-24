@@ -21,6 +21,7 @@ class Network:
     size = int
     shape_surf = pygame.Surface
     tmp = dict
+    input_size = 5
 
     def __init__(self, n_id: int, size: int):
         self.data = NetworkData(size)
@@ -37,9 +38,9 @@ class Network:
                            randrange(1, ung_globals.network_geometry_size),
                            randrange(1, ung_globals.network_geometry_size),
                            5, 5)))
-            if i < 5:
+            if i < self.input_size:
                 self.make_input(i)
-                self.neurons[i].data_handler.set_val(0.5)
+                # self.neurons[i].data_handler.set_val(0.5)
 
         for neuron in self.neurons:
             if neuron.is_input():
@@ -55,7 +56,7 @@ class Network:
             for k, v in sorted_connections.items():
                 if len(neuron.connections) < ung_globals.neuronConnections:
                     neuron.connections.append(NeuronConnection(v))
-                    self.data.neurons_weights[neuron.n_id, v.n_id] = (k * 0.001)
+                    self.data.neurons_weights[neuron.n_id, v.n_id] = (k * 0.1)
                 else:
                     break
 
@@ -83,8 +84,9 @@ class Network:
         non_input_data = numpy.dot(non_input_data_base,
                                    self.data.neurons_weights.T)  # get data from non input (only if neuron is enabled)
 
-        self.data.neurons_data = self.data.neurons_data * self.data.neurons_is_input  # clean data for non input
-        self.data.neurons_data = self.data.neurons_data + input_data + non_input_data
+        # self.data.neurons_data = self.data.neurons_data * self.data.neurons_is_input  # clean data for non input
+        # self.data.neurons_data = self.data.neurons_data + input_data + non_input_data
+        # self.data.neurons_data = numpy.apply_along_axis(neural.sigmoid, -1, self.data.neurons_data)  # sigmoid
 
         threshold_delta = self.data.neurons_thresholds_delta * numpy.invert(self.data.neurons_is_input)
         is_enabled = (self.data.neurons_data > self.data.neurons_thresholds)
@@ -95,6 +97,11 @@ class Network:
 
         # list(map(lam, self.neurons))
         # return self.n_id
+
+    def set_input_data(self, data):
+        self.data.neurons_data = self.data.neurons_data * numpy.invert(
+            self.data.neurons_is_input)  # clean data for input
+        self.data.neurons_data = self.data.neurons_data + data
 
     def make_input(self, n_id: int):
         self.data.neurons_is_input[n_id] = True

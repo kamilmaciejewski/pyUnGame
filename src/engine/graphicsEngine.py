@@ -26,6 +26,8 @@ class GraphicsEngine(ThreadWithException):
         self.consoleHandler.put_permanent_msg("graphics engine", str(self.get_fps()))
         self.screen.fill((0, 0, 0, 128))
         self.consoleHandler.draw_console(self.screen, self.get_fps())
+        for f in self.world.food:
+            f.draw(self.screen)
         for cr in self.world.creatures:
             cr.draw(self.screen)
         pygame.display.flip()

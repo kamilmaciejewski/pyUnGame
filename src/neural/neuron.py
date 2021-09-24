@@ -1,12 +1,11 @@
 import pygame
-from pygame.draw_py import Point
 
 from src import ung_globals
 from src.neural.networkDataHandler import NetworkDataHandler
 
 
 def midpoint(p1, p2):
-    return Point((p1[0] + p2[0]) / 2, (p1[1] + p2[1]) / 2)
+    return [(p1[0] + p2[0]) / 2, (p1[1] + p2[1]) / 2]
 
 
 class Neuron:
@@ -50,14 +49,17 @@ class Neuron:
 
         if self.is_input():
             pygame.draw.rect(screen, pygame.Color(255, 255, 0), self.body, 1)
+            val = pygame.font.SysFont(ung_globals.font, ung_globals.neuron_fontSize).render(self.get_info(), True,
+                                                                                            pygame.Color('white'))
+            screen.blit(val, self.body.bottomright)
         elif self.is_enabled():
             pygame.draw.rect(screen, pygame.Color(0, 255, 0), self.body, 1)
         else:
             pygame.draw.rect(screen, pygame.Color(255, 0, 0), self.body, 1)
 
-        val = pygame.font.SysFont(ung_globals.font, ung_globals.neuron_fontSize).render(self.get_info(), True,
-                                                                                        pygame.Color('white'))
-        screen.blit(val, self.body.bottomright)
+        # val = pygame.font.SysFont(ung_globals.font, ung_globals.neuron_fontSize).render(self.get_info(), True,
+        #                                                                                 pygame.Color('white'))
+        # screen.blit(val, self.body.bottomright)
         for connection in self.connections:
             pygame.draw.line(screen, pygame.Color(128, 128, 128), self.body.center, connection.n.body.center, 1)
             # val = pygame.font.SysFont(ung_globals.font, ung_globals.neuron_fontSize).render(str(round(self.data_handler.get_weight(connection.n.n_id), 3)), True,
