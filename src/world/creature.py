@@ -2,6 +2,7 @@ from random import randrange
 
 import pygame
 
+from src import ung_globals
 from src.neural.network import Network
 from src.world.sense import Sense
 
@@ -22,7 +23,10 @@ class Creature(object):
         self.energy = 2550000
         self.cr_id = cr_id
         self.network = Network(cr_id, network_size)
-        self.sense = Sense(self.network.data.neurons_data, self.network.data.neurons_is_input)
+        # TODO: neurons position should be handled better
+        # TODO: network geometry size should be a field rather than global value
+        self.sense = Sense(self.network.data.neurons_data, self.network.data.neurons_is_input, self.network.neurons,
+                           ung_globals.network_geometry_size)
         self.size = size
         self.body = pygame.Rect(pos_x - (self.size / 2), pos_y - (self.size / 2), self.size, self.size)
         self.speed = speed
@@ -32,7 +36,7 @@ class Creature(object):
 
     def update(self, food):
         self.count += 1
-        if self.is_alive():
+        if self.is_alive() and not self.is_active:
             self.body.x += (randrange((-1 * self.speed) + 1, self.speed))
             self.body.y += (randrange((-1 * self.speed) + 1, self.speed))
             self.energy -= self.speed
@@ -49,6 +53,7 @@ class Creature(object):
         if self.is_active:
             pygame.draw.rect(screen, pygame.Color(255, 0, 0, 5), self.body, 2)
             self.network.draw(screen)
+            self.sense.draw(screen)
 
     def is_alive(self):
         return self.energy >= 0

@@ -100,6 +100,12 @@ def main_calc():
     print(sigm_out)
     # print(sigm_out0)
 
+    print("tuple sum")
+    A = (1, 2)
+    B = (3, 4)
+    print(str(A))
+    print(str(B))
+    print(str(A + B))
 
 def main_calc_manual():
     global output_manual

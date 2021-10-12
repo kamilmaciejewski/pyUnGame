@@ -29,13 +29,23 @@ start = time.time()
 pygame.init()
 world = World()
 
-box = pygame.Rect(20, 20, 10, 10)
+# box = pygame.Rect(20, 20, 10, 10)
 enginesHandler = EnginesHandler()
 
 consoleHandler = ConsoleHandler()
 enginesHandler.add_engine(GraphicsEngine('Graphics', world, 60, consoleHandler))
-enginesHandler.add_engine(WorldEngine('World', world, 5, consoleHandler))
+enginesHandler.add_engine(WorldEngine('World', world, 60, consoleHandler))
 enginesHandler.add_engine(NeuralEngine('Neural', world, 60, consoleHandler))
+
+
+def move_active_creature(move: tuple):
+    for cr in world.creatures:
+        if cr.is_active:
+            cr.body.x = cr.body.x + move[0]
+            cr.body.y = cr.body.y + move[1]
+            pygame.time.wait(10)
+            return
+
 
 while True:
     end = time.time()
@@ -47,7 +57,7 @@ while True:
     consoleHandler.put_permanent_msg("elapsed",
                                      str(int(days)) + "d, " + str(int(hours)) + "h, " + str(int(minutes)) + "m, " + str(
                                          int(seconds)) + "s")
-    pygame.time.wait(1000)
+    # pygame.time.wait(1000)
 
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
@@ -74,14 +84,13 @@ while True:
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_d]:
-        box.x += 1
-        thrStatus = False
+        move_active_creature((1, 0))
     if keys[pygame.K_a]:
-        box.x -= 1
+        move_active_creature((-1, 0))
     if keys[pygame.K_w]:
-        box.y -= 1
+        move_active_creature((0, -1))
     if keys[pygame.K_s]:
-        box.y += 1
+        move_active_creature((0, 1))
 
 #   offset = 25
 #    for engine in engines:
