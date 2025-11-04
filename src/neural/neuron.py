@@ -7,7 +7,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import ung_globals
 from typing import Tuple
 import logging
-
+from src.neural.networkDataHandler import NetworkDataHandler
 
 class Neuron:
     val = 0
@@ -20,12 +20,14 @@ class Neuron:
     font = pygame.font
     shape_surf = pygame.Surface
     surface_size = 64
+    data_handler = NetworkDataHandler
     
     
 
-    def __init__(self, n_id: int, pos: tuple): #pos is actually 4 arguments, x, y size x, size y TODO: remove size from the params
+    def __init__(self, n_id: int,  n_data_handler: NetworkDataHandler, pos: tuple): #pos is actually 4 arguments, x, y size x, size y TODO: remove size from the params
         #self.font = pygame.font.SysFont(ung_globals.font, ung_globals.fontSize)
         self.n_id = n_id
+        self.data_handler = n_data_handler
         self.body = pygame.Rect(pos[0]-self.surface_size/2, pos[1]-self.surface_size/2, self.surface_size, self.surface_size)
         self.connections = list() #[NeuronConnection]
         self.threshold = 0

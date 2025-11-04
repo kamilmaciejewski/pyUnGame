@@ -33,6 +33,6 @@ class GraphicsEngine(ThreadWithException):
         self.consoleHandler.draw_console(self.screen, self.get_fps())
         for cr in self.world.creatures:
             cr.draw(self.screen)
-        for s in self.sliders:
-            s.draw(self.screen, self.font)
+        #for s in self.sliders:
+            #s.draw(self.screen, self.font)
         pygame.display.flip()

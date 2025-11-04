@@ -5,10 +5,13 @@ from random import randrange
 import ung_globals
 from neural.neuron import *
 from neural.neuronConnection import NeuronConnection
+from src.neural.networkData import NetworkData
+from src.neural.networkDataHandler import NetworkDataHandler
 from utils import geometry
 from typing import Tuple
 import logging
 from sys import stdout
+import numpy
 
 
 def lam(neuron: Neuron):
@@ -17,21 +20,33 @@ def randPos():
     return int(random.gauss(ung_globals.networkGraphSize/2 ,ung_globals.networkGraphSize/6))
 
 class Network:
+    data = NetworkData
     neurons = list[Neuron]
     n_id = int
     size = int
     shape_surf = pygame.Surface
     shape_surf_base = pygame.Surface
+    input_size = 5
 
     def __init__(self, n_id : int, size : int):
         logging.info("Network init start")
+        self.data = NetworkData(size)
         self.n_id = n_id
         self.neurons: list[Neuron] = []
         self.size = size
         
         self.shape_surf_base = pygame.Surface((ung_globals.networkGraphSize, ung_globals.networkGraphSize), pygame.SRCALPHA) #sufrace base, connections will be drawn on it once for buffering
         self.shape_surf = pygame.Surface((ung_globals.networkGraphSize, ung_globals.networkGraphSize), pygame.SRCALPHA) #sufrace for neurons, will be updated every frame
-        
+       
+        for i in range(size):
+            self.neurons.append(
+                Neuron(i,
+                        NetworkDataHandler(i, self.data),
+                        (
+                            randrange(1, ung_globals.networkGraphSize),
+                            randrange(1, ung_globals.networkGraphSize))))
+            if i < self.input_size:
+                self.make_input(i) 
         
         logging.info("\nFill neurons start")
         
@@ -64,7 +79,7 @@ class Network:
         logging.info("\nFill connections start")
         for neuron in self.neurons:
             #logging.info("Connections fill " + neuron.n_id)
-            sys.stdout.write("\rConnections fill " + neuron.n_id)
+            #sys.stdout.write("\rConnections fill " + neuron.n_id)
             sys.stdout.flush()  
             #init connections
             #logging.info("Prepared connections: " + str(neuron.n_id))
@@ -121,8 +136,47 @@ class Network:
         )
 
         sys.stdout.flush()
+    #def update(self):
+        #for neuron in self.neurons:
+            #neuron.calculate()
+        #return self.n_id
+    
+    
     def update(self):
-        for neuron in self.neurons:
-            neuron.calculate()
+        # for neuron in self.neurons:
+        #    neuron.calculate()
+
+        input_data = numpy.dot(self.data.neurons_data * self.data.neurons_is_input,
+                               self.data.neurons_weights.T)  # get data from input
+        is_enabled = (self.data.neurons_data > self.data.neurons_thresholds)
+
+        non_input_data_base = self.data.neurons_data * numpy.invert(
+            numpy.invert(self.data.neurons_is_input) * is_enabled)
+        non_input_data = numpy.dot(non_input_data_base,
+                                   self.data.neurons_weights.T)  # get data from non input (only if neuron is enabled)
+
+        # self.data.neurons_data = self.data.neurons_data * self.data.neurons_is_input  # clean data for non input
+        # self.data.neurons_data = self.data.neurons_data + input_data + non_input_data
+        # self.data.neurons_data = numpy.apply_along_axis(neural.sigmoid, -1, self.data.neurons_data)  # sigmoid
+
+        threshold_delta = self.data.neurons_thresholds_delta * numpy.invert(self.data.neurons_is_input)
+        is_enabled = (self.data.neurons_data > self.data.neurons_thresholds)
+        delta_enabled = threshold_delta * numpy.invert(is_enabled)
+        delta_disabled = threshold_delta * is_enabled
+
+        self.data.neurons_thresholds = self.data.neurons_thresholds - delta_enabled + delta_disabled
+
         # list(map(lam, self.neurons))
-        return self.n_id
+        # return self.n_id
+
+    def set_input_data(self, data):
+        self.data.neurons_data = self.data.neurons_data * numpy.invert(
+            self.data.neurons_is_input)  # clean data for input
+        self.data.neurons_data = self.data.neurons_data + data
+
+    def make_input(self, n_id: int):
+        self.data.neurons_is_input[n_id] = True
+        self.data.neurons_weights[n_id].fill(0.)
+        self.data.neurons_thresholds[n_id] = 0.
+        for conn in self.neurons[n_id].connections:
+            conn.weight = 0.
