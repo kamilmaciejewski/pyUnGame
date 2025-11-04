@@ -1,5 +1,7 @@
 class World:
-    creatures = list
+    creatures: list
+    food: list
 
     def __init__(self):
         self.creatures = list()
+        self.food = list()

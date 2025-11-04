@@ -15,6 +15,7 @@ from engine.neuralEngine import NeuralEngine
 from engine.worldEngine import WorldEngine
 from world.world import World
 
+start = time.time()
 #
 # d = dict()
 # d[0.7] = 42
@@ -24,48 +25,64 @@ from world.world import World
 # for k, v in od.items():
 #     logger.log("ASD","K:" + str(k) + ",v:" + str(v))
 
+
 pygame.init()
 world = World()
 
-box = pygame.Rect(20, 20, 10, 10)
+# box = pygame.Rect(20, 20, 10, 10)
 enginesHandler = EnginesHandler()
 
 consoleHandler = ConsoleHandler()
-
+enginesHandler.add_engine(GraphicsEngine('Graphics', world, 60, consoleHandler))
 enginesHandler.add_engine(WorldEngine('World', world, 60, consoleHandler))
 enginesHandler.add_engine(NeuralEngine('Neural', world, 60, consoleHandler))
 enginesHandler.add_engine(GraphicsEngine('Graphics', world, 60, consoleHandler))
 
 
 while True:
+    end = time.time()
+    val = end - start
+    days = val // 86400
+    hours = val // 3600 % 24
+    minutes = val // 60 % 60
+    seconds = val % 60
+    consoleHandler.put_permanent_msg("elapsed",
+                                     str(int(days)) + "d, " + str(int(hours)) + "h, " + str(int(minutes)) + "m, " + str(
+                                         int(seconds)) + "s")
+    # pygame.time.wait(1000)
+
     for event in pygame.event.get():
-        if event.type == pygame.MOUSEBUTTONUP:
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+            enginesHandler.stop_all()
+            sys.exit(0)
+        elif event.type == pygame.MOUSEBUTTONUP:
             pos = pygame.mouse.get_pos()
             found = False
             for cr in world.creatures:
                 if cr.body.collidepoint(pos) and not found:
+
                     cr.is_active = True
+                    log("Data", str(cr.network.data.neurons_data))
+                    log("Data_res", str(cr.network.data.neurons_data_res))
+                    log("Weights", str(cr.network.data.neurons_weights[0]))
+                    log("Conn", cr.network.neurons[0].get_conn_list())
                     found = True
                 else:
                     cr.is_active = False
 
-        if event.type == pygame.QUIT:
-            enginesHandler.stop_all()
-            sys.exit(0)
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+        elif event.type == pygame.QUIT:
             enginesHandler.stop_all()
             sys.exit(0)
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_d]:
-        box.x += 1
-        thrStatus = False
+        move_active_creature((1, 0))
     if keys[pygame.K_a]:
-        box.x -= 1
+        move_active_creature((-1, 0))
     if keys[pygame.K_w]:
-        box.y -= 1
+        move_active_creature((0, -1))
     if keys[pygame.K_s]:
-        box.y += 1
+        move_active_creature((0, 1))
 
 #   offset = 25
 #    for engine in engines:

@@ -6,6 +6,9 @@ font = "lucidaconsole"
 fontSize = 12
 #font = pygame.font.SysFont(font, fontSize)
 
+# neural network
+neuron_fontSize = 10
+network_geometry_size = 512
 # Default world settings
 worldSize = 1
 #creature parameters

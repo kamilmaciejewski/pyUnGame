@@ -20,20 +20,19 @@ def randPos():
     return int(random.gauss(ung_globals.networkGraphSize/2 ,ung_globals.networkGraphSize/6))
 
 class Network:
-    data = NetworkData
-    neurons = list[Neuron]
+    neurons = list
     n_id = int
     size = int
     shape_surf = pygame.Surface
     shape_surf_base = pygame.Surface
+    tmp = dict
     input_size = 5
 
-    def __init__(self, n_id : int, size : int):
-        logging.info("Network init start")
-        self.data = NetworkData(size)
+
+    def __init__(self, n_id, size):
         self.n_id = n_id
-        self.neurons: list[Neuron] = []
-        self.size = size
+        self.neurons: list[Neuron] = [] #TODO remove?
+        self.size = size #TODO remove?
         
         self.shape_surf_base = pygame.Surface((ung_globals.networkGraphSize, ung_globals.networkGraphSize), pygame.SRCALPHA) #sufrace base, connections will be drawn on it once for buffering
         self.shape_surf = pygame.Surface((ung_globals.networkGraphSize, ung_globals.networkGraphSize), pygame.SRCALPHA) #sufrace for neurons, will be updated every frame
@@ -96,7 +95,8 @@ class Network:
             #select shortest connections based on predefined limit
             for k, v in sorted_connections.items():
                 if len(neuron.connections) < ung_globals.neuronConnections:
-                    neuron.connections.append(NeuronConnection(v, k))
+                    neuron.connections.append(NeuronConnection(v))
+                    self.data.neurons_weights[neuron.n_id, v.n_id] = (k * 0.1)
                 else:
                     break
     
@@ -143,6 +143,29 @@ class Network:
     
     
     def update(self):
+        # for neuron in self.neurons:
+        #    neuron.calculate()
+
+        input_data = numpy.dot(self.data.neurons_data * self.data.neurons_is_input,
+                               self.data.neurons_weights.T)  # get data from input
+        is_enabled = (self.data.neurons_data > self.data.neurons_thresholds)
+
+        non_input_data_base = self.data.neurons_data * numpy.invert(
+            numpy.invert(self.data.neurons_is_input) * is_enabled)
+        non_input_data = numpy.dot(non_input_data_base,
+                                   self.data.neurons_weights.T)  # get data from non input (only if neuron is enabled)
+
+        # self.data.neurons_data = self.data.neurons_data * self.data.neurons_is_input  # clean data for non input
+        # self.data.neurons_data = self.data.neurons_data + input_data + non_input_data
+        # self.data.neurons_data = numpy.apply_along_axis(neural.sigmoid, -1, self.data.neurons_data)  # sigmoid
+
+        threshold_delta = self.data.neurons_thresholds_delta * numpy.invert(self.data.neurons_is_input)
+        is_enabled = (self.data.neurons_data > self.data.neurons_thresholds)
+        delta_enabled = threshold_delta * numpy.invert(is_enabled)
+        delta_disabled = threshold_delta * is_enabled
+
+        self.data.neurons_thresholds = self.data.neurons_thresholds - delta_enabled + delta_disabled
+
         # for neuron in self.neurons:
         #    neuron.calculate()
 

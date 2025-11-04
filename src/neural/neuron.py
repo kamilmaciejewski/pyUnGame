@@ -71,7 +71,10 @@ class Neuron:
         self.connections.append(nc)
 
     def is_enabled(self):
-        return self.val >= self.threshold
+        return self.data_handler.get_val() >= self.data_handler.get_threshold()
+
+    def get_val(self):
+        return self.data_handler.get_val()
     
     def midpoint(x1: int, x2: int) -> int:
         return round((x1 + x2) / 2)
@@ -101,3 +104,35 @@ class Neuron:
         #val = self.font.render( f"v: {self.val:.2f}, th: {self.threshold:.2f}", True, pygame.Color('white'))
         #screen.blit(val,self.body) 
         
+
+        if self.is_input():
+            pygame.draw.rect(screen, pygame.Color(255, 255, 0), self.body, 1)
+            val = pygame.font.SysFont(ung_globals.font, ung_globals.neuron_fontSize).render(self.get_info(), True,
+                                                                                            pygame.Color('white'))
+            screen.blit(val, self.body.bottomright)
+        elif self.is_enabled():
+            pygame.draw.rect(screen, pygame.Color(0, 255, 0), self.body, 1)
+        else:
+            pygame.draw.rect(screen, pygame.Color(255, 0, 0), self.body, 1)
+
+        # val = pygame.font.SysFont(ung_globals.font, ung_globals.neuron_fontSize).render(self.get_info(), True,
+        #                                                                                 pygame.Color('white'))
+        # screen.blit(val, self.body.bottomright)
+        for connection in self.connections:
+            pygame.draw.line(screen, pygame.Color(128, 128, 128), self.body.center, connection.n.body.center, 1)
+            # val = pygame.font.SysFont(ung_globals.font, ung_globals.neuron_fontSize).render(str(round(self.data_handler.get_weight(connection.n.n_id), 3)), True,
+            #                                                                                 pygame.Color('white'))
+            # screen.blit(val, midpoint(self.body.center, connection.n.body.center))
+
+    def get_info(self) -> str:
+        return str(self.n_id) + ": (" + str(round(self.get_val(), 2)) + ": " + str(
+            round(self.data_handler.get_threshold(), 2)) + ")"
+
+    def get_conn_list(self):
+        res = ""
+        for conn in self.connections:
+            res += (str(conn.n.n_id) + ": " + str(conn.weight) + ";")
+        return res
+
+    def is_input(self):
+        return self.data_handler.is_input()

@@ -17,6 +17,7 @@ class GraphicsEngine(ThreadWithException):
         super().__init__(name, fps)
         self.font = pygame.font.SysFont(ung_globals.font, ung_globals.fontSize)
         # pygame.DOUBLEBUF
+
         self.screen = pygame.display.set_mode(ung_globals.screenSize)
         # , depth=32, flags=pygame.SRCALPHA)
         self.world = world
@@ -31,6 +32,8 @@ class GraphicsEngine(ThreadWithException):
         self.consoleHandler.put_permanent_msg("graphics engine", str(self.get_fps()))
         self.screen.fill((0, 0, 0, 128))
         self.consoleHandler.draw_console(self.screen, self.get_fps())
+        for f in self.world.food:
+            f.draw(self.screen)
         for cr in self.world.creatures:
             cr.draw(self.screen)
         #for s in self.sliders:

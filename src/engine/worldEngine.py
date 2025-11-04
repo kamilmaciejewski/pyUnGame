@@ -11,16 +11,20 @@ class WorldEngine(ThreadWithException):
     world = None
     nextId = int
     consoleHandler = ConsoleHandler
+    counter = int
 
     def __init__(self, name: str, world: World, fps: int, cons: ConsoleHandler):
         super().__init__(name, fps)
         self.world = world
         self.nextId = 0
         self.consoleHandler = cons
+        self.counter = 0
+        self.world.food.append(
+            Food(self.nextId, 350 + randrange(100), 250 + randrange(100), randrange(50, 100)))
 
     def run_loop(self):
         self.consoleHandler.put_permanent_msg("world engine", str(self.get_fps()))
-        self.consoleHandler.put_permanent_msg("creatures", str(len(self.world.creatures)))
+
         if len(self.world.creatures) < ung_globals.worldSize:
             #self.consoleHandler.put_msg("creature add: " + str(self.nextId))
             self.world.creatures.append(
@@ -33,7 +37,8 @@ class WorldEngine(ThreadWithException):
                     ung_globals.creatureNeurons #network size
                     ))
             self.nextId += 1
+            self.world.creatures[0].is_active = True
         for cr in self.world.creatures:
-            cr.update()
+            cr.update(self.world.food)
             if not cr.is_alive():
                 self.world.creatures.remove(cr)
