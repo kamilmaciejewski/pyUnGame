@@ -15,7 +15,7 @@ class Creature(object): #attributes and default values
     network_size = int
     network = Network #each creature carries it's neural network as it's brain
     cr_id = int #id is updated on init
-    is_active = False
+    is_active = True
     energy = int
     count = 0 #number of update cycles, like age
 

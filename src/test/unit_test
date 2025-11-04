@@ -3,27 +3,74 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from neural.neuron import Neuron
+from neural.neuronConnection import NeuronConnection
+from neural.network import Network
+from utils import geometry
 import ung_globals
+
 from random import randrange
+from random import normalvariate
 import pygame
 
 def dodaj(a, b):
     return a + b
+
+def testHeader(testId):
+    print("===============\nStarting test: " + testId+"\n")
 
 
 class TestNeural(unittest.TestCase):
     def setUp(self):
         print("Init")
         pygame.init()
+        print("Init done")
             
     def test_neruon(self):
-        n = Neuron(str(1) + ":" + str(2), (randrange(1, ung_globals.networkGraphSize), randrange(1, ung_globals.networkGraphSize), 5, 5))
-        n.connections.clear
-        n.add_connection
+        testHeader("test_neruon")
+        n0 = Neuron(str(1), (0, 0))
+        print("n0 body: " + str(n0.pos))
+        
+        n1 = Neuron(str(1), (10, 10))
+        print("n1 body: " + str(n1.pos))
+        dist = geometry.calculate_distance(n0.pos, n1.pos)
+        print("Distance: " + str(dist))
+        nc = NeuronConnection(n1, dist)
+        n0.add_connection(nc)
+        
+        nc0 = n0.connections.__getitem__(0)
+        
+        print("conn : " + str(nc.weight))
+        print("weight from neuron: " + str(nc0.weight))
 
-
-    def test_dodaj_ujemne(self):
-        self.assertEqual(dodaj(-1, -2), -3)
+    def test_nertwork(self):
+        testHeader("test_network")
+        
+        network = Network(1, 2)
+        #clear neurons
+        network.neurons.clear
+        
+        #add new neurons
+        n0 = Neuron(str(1), (0, 0, 5, 5))
+        n1 = Neuron(str(1), (10, 10, 5, 5))
+        network.neurons.append(n0)
+        network.neurons.append(n1)
+        network.init_connetctions()
+        
+        dist = geometry.calculate_distance(n0.pos, n1.pos)
+        distPercent = dist/ung_globals.networkGraphSize
+        
+        print("Distance between neurons: " + str(dist))
+        print("Distance between neurons as percent of the graph: " + str(distPercent))
+        
+        
+        
+        print("Network size: " + str(network.size))
+        print("Network conn0 wieght: " + str(network.neurons.__getitem__(0).connections.__getitem__(0).weight))
+        
+        x = int(normalvariate(ung_globals.networkGraphSize/2,ung_globals.networkGraphSize/2))
+        print("GAUSS: " + (str(x)))
+        
+        
 
 
 if __name__ == "__main__":

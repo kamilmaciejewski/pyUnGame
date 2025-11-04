@@ -14,7 +14,7 @@ class ConsoleHandler:
         self.font = pygame.font.SysFont(ung_globals.font, ung_globals.fontSize)
         self.permanent_messages = dict()
         self.messages = list()
-        self.messages.append("Init log console")
+        #self.messages.append("\nInit log console")
         logging.basicConfig(level=logging.INFO, format='%(message)s')
 
     def put_permanent_msg(self, msg_id: str, val: str):
@@ -34,4 +34,4 @@ class ConsoleHandler:
             offset += 10
         while self.messages:
             msg =  self.messages.pop(0) 
-            logging.info(msg)
+            logging.info("\n" + msg)

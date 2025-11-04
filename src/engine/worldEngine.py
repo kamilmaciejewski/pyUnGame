@@ -22,7 +22,7 @@ class WorldEngine(ThreadWithException):
         self.consoleHandler.put_permanent_msg("world engine", str(self.get_fps()))
         self.consoleHandler.put_permanent_msg("creatures", str(len(self.world.creatures)))
         if len(self.world.creatures) < ung_globals.worldSize:
-            self.consoleHandler.put_msg("creature add: " + str(self.nextId))
+            #self.consoleHandler.put_msg("creature add: " + str(self.nextId))
             self.world.creatures.append(
                 Creature(
                     self.nextId,  #creature ID
