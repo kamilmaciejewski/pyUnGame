@@ -1,4 +1,4 @@
-from src.engine.thread import ThreadWithException
+from engine.thread import ThreadWithException
 
 
 class EnginesHandler:

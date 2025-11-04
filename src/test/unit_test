@@ -1,0 +1,30 @@
+import unittest
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from neural.neuron import Neuron
+import ung_globals
+from random import randrange
+import pygame
+
+def dodaj(a, b):
+    return a + b
+
+
+class TestNeural(unittest.TestCase):
+    def setUp(self):
+        print("Init")
+        pygame.init()
+            
+    def test_neruon(self):
+        n = Neuron(str(1) + ":" + str(2), (randrange(1, ung_globals.networkGraphSize), randrange(1, ung_globals.networkGraphSize), 5, 5))
+        n.connections.clear
+        n.add_connection
+
+
+    def test_dodaj_ujemne(self):
+        self.assertEqual(dodaj(-1, -2), -3)
+
+
+if __name__ == "__main__":
+    unittest.main()

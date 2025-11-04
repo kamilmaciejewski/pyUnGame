@@ -1,10 +1,10 @@
 from random import randrange
 
-from src import ung_globals
-from src.creature import Creature
-from src.engine.consoleHandler import ConsoleHandler
-from src.engine.thread import ThreadWithException
-from src.world.world import World
+import ung_globals
+from creature import Creature
+from engine.consoleHandler import ConsoleHandler
+from engine.thread import ThreadWithException
+from world.world import World
 
 
 class WorldEngine(ThreadWithException):
@@ -22,9 +22,16 @@ class WorldEngine(ThreadWithException):
         self.consoleHandler.put_permanent_msg("world engine", str(self.get_fps()))
         self.consoleHandler.put_permanent_msg("creatures", str(len(self.world.creatures)))
         if len(self.world.creatures) < ung_globals.worldSize:
+            self.consoleHandler.put_msg("creature add: " + str(self.nextId))
             self.world.creatures.append(
-                Creature(self.nextId, 350 + randrange(100), 250 + randrange(100), randrange(15, 30), randrange(2, 6),
-                         ung_globals.creatureNeurons))
+                Creature(
+                    self.nextId,  #creature ID
+                    350 + randrange(100), #position X
+                    250 + randrange(100), #position Y
+                    randrange(15, 30), #size
+                    randrange(2, 6), #speed
+                    ung_globals.creatureNeurons #network size
+                    ))
             self.nextId += 1
         for cr in self.world.creatures:
             cr.update()

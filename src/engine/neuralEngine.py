@@ -1,7 +1,7 @@
-from src.creature import Creature
-from src.engine.consoleHandler import ConsoleHandler
-from src.engine.thread import ThreadWithException
-from src.world.world import World
+from creature import Creature
+from engine.consoleHandler import ConsoleHandler
+from engine.thread import ThreadWithException
+from world.world import World
 
 
 def lam(cr: Creature):

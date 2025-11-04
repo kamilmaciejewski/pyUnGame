@@ -1,9 +1,9 @@
 import pygame
 
-from src import ung_globals
-from src.engine.consoleHandler import ConsoleHandler
-from src.engine.thread import ThreadWithException
-from src.world.world import World
+import ung_globals
+from engine.consoleHandler import ConsoleHandler
+from engine.thread import ThreadWithException
+from world.world import World
 
 
 class GraphicsEngine(ThreadWithException):

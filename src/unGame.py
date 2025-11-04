@@ -3,15 +3,16 @@ import sys
 
 import pygame
 
-from src.engine.consoleHandler import ConsoleHandler
-
 sys.path.append(os.path.abspath(os.path.dirname(__file__)) + "/..")
+from engine.consoleHandler import ConsoleHandler
 
-from src.engine.enginesHandler import EnginesHandler
-from src.engine.graphicsEngine import GraphicsEngine
-from src.engine.neuralEngine import NeuralEngine
-from src.engine.worldEngine import WorldEngine
-from src.world.world import World
+
+
+from engine.enginesHandler import EnginesHandler
+from engine.graphicsEngine import GraphicsEngine
+from engine.neuralEngine import NeuralEngine
+from engine.worldEngine import WorldEngine
+from world.world import World
 
 #
 # d = dict()
