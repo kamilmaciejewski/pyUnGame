@@ -6,10 +6,11 @@ import ung_globals
 import pygame
 
 class NeuronConnection:
+    weight = float
     n = Neuron
     col = pygame.Color
 
-    def __init__(self, n: Neuron):
+    def __init__(self, n: Neuron, w: float):
         self.n = n
         # TODO: weight should depend on the distance bwetwwn neurons
         self.weight = min( 0.75/(w + 0.00001), 0.075) #* (ung_globals.connectionWeightUnit / ung_globals.neuronConnections)

@@ -1,10 +1,11 @@
 from random import randrange
 
 import ung_globals
-from creature import Creature
+from world.creature import Creature
 from engine.consoleHandler import ConsoleHandler
 from engine.thread import ThreadWithException
 from world.world import World
+from world.food import Food
 
 
 class WorldEngine(ThreadWithException):
@@ -19,8 +20,8 @@ class WorldEngine(ThreadWithException):
         self.nextId = 0
         self.consoleHandler = cons
         self.counter = 0
-        self.world.food.append(
-            Food(self.nextId, 350 + randrange(100), 250 + randrange(100), randrange(50, 100)))
+        #self.world.food.append(
+        #    Food(self.nextId, 350 + randrange(100), 250 + randrange(100), randrange(50, 100)))
 
     def run_loop(self):
         self.consoleHandler.put_permanent_msg("world engine", str(self.get_fps()))

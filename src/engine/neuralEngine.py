@@ -1,4 +1,4 @@
-from creature import Creature
+from world.creature import Creature
 from engine.consoleHandler import ConsoleHandler
 from engine.thread import ThreadWithException
 from world.world import World

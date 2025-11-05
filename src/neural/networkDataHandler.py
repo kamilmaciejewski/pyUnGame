@@ -1,4 +1,4 @@
-from src.neural.networkData import NetworkData
+from neural.networkData import NetworkData
 
 
 class NetworkDataHandler:

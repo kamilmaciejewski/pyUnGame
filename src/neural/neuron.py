@@ -7,14 +7,14 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import ung_globals
 from typing import Tuple
 import logging
-from src.neural.networkDataHandler import NetworkDataHandler
+from neural.networkDataHandler import NetworkDataHandler
 
 class Neuron:
     val = 0
     connections = list #[NeuronConnection]
     threshold = float
     threshold_boost = float
-    n_id = str
+    n_id = int
     body = pygame.Rect
     pos = tuple
     font = pygame.font
@@ -110,19 +110,9 @@ class Neuron:
             val = pygame.font.SysFont(ung_globals.font, ung_globals.neuron_fontSize).render(self.get_info(), True,
                                                                                             pygame.Color('white'))
             screen.blit(val, self.body.bottomright)
-        elif self.is_enabled():
-            pygame.draw.rect(screen, pygame.Color(0, 255, 0), self.body, 1)
-        else:
-            pygame.draw.rect(screen, pygame.Color(255, 0, 0), self.body, 1)
-
         # val = pygame.font.SysFont(ung_globals.font, ung_globals.neuron_fontSize).render(self.get_info(), True,
         #                                                                                 pygame.Color('white'))
         # screen.blit(val, self.body.bottomright)
-        for connection in self.connections:
-            pygame.draw.line(screen, pygame.Color(128, 128, 128), self.body.center, connection.n.body.center, 1)
-            # val = pygame.font.SysFont(ung_globals.font, ung_globals.neuron_fontSize).render(str(round(self.data_handler.get_weight(connection.n.n_id), 3)), True,
-            #                                                                                 pygame.Color('white'))
-            # screen.blit(val, midpoint(self.body.center, connection.n.body.center))
 
     def get_info(self) -> str:
         return str(self.n_id) + ": (" + str(round(self.get_val(), 2)) + ": " + str(

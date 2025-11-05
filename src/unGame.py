@@ -2,7 +2,7 @@ import os
 import sys
 
 import pygame
-
+import time
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__)) + "/..")
 from engine.consoleHandler import ConsoleHandler
@@ -62,10 +62,10 @@ while True:
                 if cr.body.collidepoint(pos) and not found:
 
                     cr.is_active = True
-                    log("Data", str(cr.network.data.neurons_data))
-                    log("Data_res", str(cr.network.data.neurons_data_res))
-                    log("Weights", str(cr.network.data.neurons_weights[0]))
-                    log("Conn", cr.network.neurons[0].get_conn_list())
+                    #log("Data", str(cr.network.data.neurons_data))
+                    #log("Data_res", str(cr.network.data.neurons_data_res))
+                    #log("Weights", str(cr.network.data.neurons_weights[0]))
+                    #log("Conn", cr.network.neurons[0].get_conn_list())
                     found = True
                 else:
                     cr.is_active = False
@@ -74,15 +74,15 @@ while True:
             enginesHandler.stop_all()
             sys.exit(0)
 
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_d]:
-        move_active_creature((1, 0))
-    if keys[pygame.K_a]:
-        move_active_creature((-1, 0))
-    if keys[pygame.K_w]:
-        move_active_creature((0, -1))
-    if keys[pygame.K_s]:
-        move_active_creature((0, 1))
+    #keys = pygame.key.get_pressed()
+    #if keys[pygame.K_d]:
+        #move_active_creature((1, 0))
+    #if keys[pygame.K_a]:
+        #move_active_creature((-1, 0))
+    #if keys[pygame.K_w]:
+        #move_active_creature((0, -1))
+    #if keys[pygame.K_s]:
+        #move_active_creature((0, 1))
 
 #   offset = 25
 #    for engine in engines:
