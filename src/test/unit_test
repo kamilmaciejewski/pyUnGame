@@ -32,7 +32,7 @@ class TestNeural(unittest.TestCase):
         
         n0 = Neuron(0, NetworkDataHandler(0, data), (0, 0))
         print("n0 body: " + str(n0.pos))
-        self.assertEqual(n0.n_id, 1)
+        self.assertEqual(n0.n_id, 0)
         
         n1 = Neuron(1,NetworkDataHandler(1, data), (10, 10))
         print("n1 body: " + str(n1.pos))
