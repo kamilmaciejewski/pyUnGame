@@ -1,0 +1,21 @@
+# Compiled Python files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+
+# Test and coverage files
+.pytest_cache/
+.coverage
+htmlcov/
+
+# VS Code settings
+.vscode/
+*.code-workspace
+
+# Logs and temporary files
+*.log
+*.tmp

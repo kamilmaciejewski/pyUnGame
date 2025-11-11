@@ -2,9 +2,14 @@ import unittest
 from random import randrange
 
 import numpy as np
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from src.neural.network import Network
-from src.neural.neuron import Neuron
+from neural.network import Network
+from neural.neuron import Neuron
+
+if __name__ == "__main__":
+    unittest.main()
 
 
 def print_network(network):

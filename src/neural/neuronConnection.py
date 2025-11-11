@@ -13,7 +13,7 @@ class NeuronConnection:
     def __init__(self, n: Neuron, w: float):
         self.n = n
         # TODO: weight should depend on the distance bwetwwn neurons
-        self.weight = min( 0.75/(w + 0.00001), 0.075) #* (ung_globals.connectionWeightUnit / ung_globals.neuronConnections)
+        self.weight = min(1/w, 1) #* (ung_globals.connectionWeightUnit / ung_globals.neuronConnections)
         #logging.info("Neuron connection " + str(self.weight) + " created")
         # log("neuron", "Neuron connection " + str(self.weight) + " created")
         val = int(min(self.weight*2000, 255))

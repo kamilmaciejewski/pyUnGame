@@ -9,6 +9,7 @@ from neural.networkDataHandler import NetworkDataHandler
 from neural.networkData import NetworkData
 from utils import geometry
 import ung_globals
+import time
 
 from random import randrange
 from random import normalvariate
@@ -54,11 +55,11 @@ class TestNeural(unittest.TestCase):
         network.neurons.clear
         
         #add new neurons
-        n0 = Neuron(0, NetworkDataHandler(0, network.data), (0, 0, 5, 5))
-        n1 = Neuron(1, NetworkDataHandler(1, network.data), (10, 10, 5, 5))
+        n0 = Neuron(0, NetworkDataHandler(0, network.data), (0, 0))
+        n1 = Neuron(1, NetworkDataHandler(1, network.data), (10, 10))
         network.neurons.append(n0)
         network.neurons.append(n1)
-        network.init_connetctions()
+        network.init_connections()
         
         dist = geometry.calculate_distance(n0.pos, n1.pos)
         distPercent = dist/ung_globals.networkGraphSize
@@ -70,9 +71,6 @@ class TestNeural(unittest.TestCase):
         
         print("Network size: " + str(network.size))
         print("Network conn0 wieght: " + str(network.neurons.__getitem__(0).connections.__getitem__(0).weight))
-        
-        x = int(normalvariate(ung_globals.networkGraphSize/2,ung_globals.networkGraphSize/2))
-        print("GAUSS: " + (str(x)))
         
         
 

@@ -12,14 +12,18 @@ network_geometry_size = 512
 # Default world settings
 worldSize = 1
 #creature parameters
-creatureNeurons = 100
+creatureNeurons = 2000
 
 #neuron parameters
 neuronConnections = 8 #number of neuron connections
-connectionWeightUnit = 0.01 #base unit of neuron connection weight 
+connectionWeightUnit = 1 #base unit of neuron connection weight 
 networkGraphSize = 1024 #neurons position limit
 neruonTreshholdDelta = 0.1
 neuronDistance = 5 #minimum distance between neurons
+
+
+#graph parameters
+neuronDrawingScale = 10
 
 #misc
 

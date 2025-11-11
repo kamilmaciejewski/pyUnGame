@@ -38,13 +38,7 @@ class Network:
         self.shape_surf_base = pygame.Surface((ung_globals.networkGraphSize, ung_globals.networkGraphSize), pygame.SRCALPHA) #sufrace base, connections will be drawn on it once for buffering
         self.shape_surf = pygame.Surface((ung_globals.networkGraphSize, ung_globals.networkGraphSize), pygame.SRCALPHA) #sufrace for neurons, will be updated every frame
        
-        #for i in range(size):
-        #    self.neurons.append(
-        #        Neuron(i,
-        #                NetworkDataHandler(i, self.data),
-        #                (
-        #                    randrange(1, ung_globals.networkGraphSize),
-         #                   randrange(1, ung_globals.networkGraphSize))))
+        #TODO enable input
         #    if i < self.input_size:
         #        self.make_input(i) 
         
@@ -52,18 +46,20 @@ class Network:
         neuronId = 0
         while self.neurons.__len__() < size-1:
             #generate random position
+            #TODO enable matrix data
             n = Neuron(neuronId, NetworkDataHandler(neuronId, self.data), (randPos(), randPos()))
-            neuronId +=1
             if self.checkDistances(n):
                 self.neurons.append(n)
-                sys.stdout.write("\rNeuron fill " + str(len(self.neurons)) + " of " + str(size))
-                sys.stdout.flush()  
+                neuronId +=1
+                #sys.stdout.write("\rNeuron fill " + str(len(self.neurons)) + " of " + str(size))
+                #sys.stdout.flush()  
                 #logging.info("Neuron fill " + str(len(self.neurons)) + " of " + str(size))
             
             
             
             #logging.info("Fill neurons done: " + str(i))
-        self.init_connetctions() #calculate neurons connections
+        self.init_connections() #calculate neurons connections
+        sys.stdout.writelines("asd")
         self.draw_connections(self.shape_surf_base) #draw connections on the base surface
         
         
@@ -76,7 +72,7 @@ class Network:
                 return False
         return True
         
-    def init_connetctions(self):
+    def init_connections(self):
         logging.info("\nFill connections start")
         for neuron in self.neurons:
             #logging.info("Connections fill " + neuron.n_id)
@@ -102,6 +98,7 @@ class Network:
                     self.data.neurons_weights[neuron.n_id, v.n_id] = (k * 0.1)		  
                 else:
                     break
+        
     
     def draw_connections(self, screen: pygame.surface):
         for neuron in self.neurons:
@@ -128,7 +125,7 @@ class Network:
             
         screen.blit(self.shape_surf, (0, 100))
         thr = thr / ung_globals.creatureNeurons
-        thrWarm = thrWarm / (ung_globals.creatureNeurons - enabledCount)
+        #thrWarm = thrWarm / (ung_globals.creatureNeurons - enabledCount)+1
         sys.stdout.write(
         "\rEnabled: " + str(enabledCount)
         + "/" + str(ung_globals.creatureNeurons)
@@ -146,8 +143,8 @@ class Network:
     
     
     def update(self):
-        # for neuron in self.neurons:
-        #    neuron.calculate()
+        for neuron in self.neurons:
+            neuron.calculate()
 
         input_data = numpy.dot(self.data.neurons_data * self.data.neurons_is_input,
                                self.data.neurons_weights.T)  # get data from input

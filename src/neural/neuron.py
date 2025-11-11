@@ -71,10 +71,14 @@ class Neuron:
         self.connections.append(nc)
 
     def is_enabled(self):
-        return self.data_handler.get_val() >= self.data_handler.get_threshold()
+        #TODO enable matrix data
+        #return self.data_handler.get_val() >= self.data_handler.get_threshold()
+        return self.val >= self.threshold
 
     def get_val(self):
-        return self.data_handler.get_val()
+        #TODO enable matrix data
+        #return self.data_handler.get_val()
+        return self.val
     
     def midpoint(x1: int, x2: int) -> int:
         return round((x1 + x2) / 2)
@@ -83,16 +87,8 @@ class Neuron:
         val = int(min(weight, 255))
         return pygame.Color(val, val, val)
     def draw(self, screen: pygame.surface):
-        #for connection in self.connections:
-            #pygame.draw.line(screen, connection.col, self.pos, connection.n.pos, 1)
-            #valConn = self.font.render( f"w: {connection.weight:.2f}", True, pygame.Color('white'))
-        
-            #x = (self.body.centerx + connection.n.body.centerx) /2
-            #y = (self.body.centery + connection.n.body.centery) /2
-            #xy = (x , y)
-            #screen.blit(valConn,(x,y))
-        size = min(self.threshold*20,30)
-        size2 = int(min(size*10, 255))
+        size = min(self.threshold*ung_globals.neuronDrawingScale,30)
+        size2 = int(min(size*ung_globals.neuronDrawingScale, 50))
         if self.is_enabled():
             #pygame.draw.rect(screen, pygame.Color(0, 255, 0), self.body, 10, 5)
             pygame.draw.circle(screen, pygame.Color(0, 255, 0), self.pos, size)
